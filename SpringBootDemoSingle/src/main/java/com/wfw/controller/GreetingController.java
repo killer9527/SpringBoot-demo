@@ -1,7 +1,7 @@
 package com.wfw.controller;
 
-import com.wfw.vo.hello.GreetingRequestVO;
-import com.wfw.vo.hello.GreetingResponseVO;
+import com.wfw.vo.greeting.GreetingRequestVO;
+import com.wfw.vo.greeting.GreetingResponseVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

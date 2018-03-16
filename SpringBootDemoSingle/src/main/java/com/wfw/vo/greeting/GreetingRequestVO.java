@@ -1,4 +1,4 @@
-package com.wfw.vo.hello;
+package com.wfw.vo.greeting;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

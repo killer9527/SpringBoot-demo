@@ -1,4 +1,4 @@
-package com.wfw.vo.hello;
+package com.wfw.vo.greeting;
 
 import com.wfw.vo.BaseResponseVO;
 import io.swagger.annotations.ApiModel;
