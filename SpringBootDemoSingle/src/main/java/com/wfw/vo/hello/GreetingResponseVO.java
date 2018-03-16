@@ -1,5 +1,6 @@
 package com.wfw.vo.hello;
 
+import com.wfw.vo.BaseResponseVO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
