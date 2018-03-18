@@ -1,17 +1,19 @@
 package com.wfw.interceptor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 /**
  * Created by killer9527 on 2018/3/16.
  * 日志拦截器
  */
 public class LogInterceptor implements HandlerInterceptor{
+    private Logger logger = LoggerFactory.getLogger(LogInterceptor.class);
     /**
      * controller 执行之前调用
      * @param request
@@ -25,7 +27,6 @@ public class LogInterceptor implements HandlerInterceptor{
         long startTime = System.currentTimeMillis();  //记录起始时间
         request.setAttribute("startTime", startTime);
 
-        //todo:记录接口访问和接口参数
         return true;
     }
 
@@ -40,7 +41,6 @@ public class LogInterceptor implements HandlerInterceptor{
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
         // You can add attributes in the modelAndView
-        System.out.println();
     }
 
     /**
@@ -57,7 +57,6 @@ public class LogInterceptor implements HandlerInterceptor{
         long endTime = System.currentTimeMillis();
         long timeTaken = endTime - startTime;
         String requestUrl = request.getRequestURL().toString();
-        System.out.println(requestUrl);
-        System.out.println("耗时：" + timeTaken);
+        logger.info("调用接口：" + requestUrl + "，耗时" + timeTaken);
     }
 }

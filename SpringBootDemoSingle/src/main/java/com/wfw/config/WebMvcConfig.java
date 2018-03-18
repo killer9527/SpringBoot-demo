@@ -40,7 +40,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/user/login",
                         "/swagger-resources/**", "/swagger-ui.html", "/v2/api-docs");
 
-
         //addPathPatterns和excludePathPatterns分别用于指定路由和排除路由
     }
 }

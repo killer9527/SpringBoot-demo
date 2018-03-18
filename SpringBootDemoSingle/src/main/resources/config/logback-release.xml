@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <contextName>logback-SpringBootDemoSingle</contextName>
+    <property name="log.file" value="logback.log"/>
+    <property name="FilePath" value="/data1/logs/release/SpringBootDemoSingle"/>
+
+    <appender name="amqp" class="org.springframework.amqp.rabbit.logback.AmqpAppender">
+        <layout>
+            <pattern>
+                {
+                "time": "%date",
+                "thread": "%thread",
+                "level": "%level",
+                "class": "%logger",
+                "message": "%message",
+                "system": "SpringBootDemoSingle"
+                }
+            </pattern>
+        </layout>
+        <host>10.200.xx.xx</host>
+        <port>5672</port>
+        <virtualHost>/</virtualHost>
+        <username>username</username>
+        <password>password</password>
+        <exchangeType>topic</exchangeType>
+        <exchangeName>rd6.log</exchangeName>
+        <applicationId>SpringBootDemoSingle</applicationId>
+        <routingKeyPattern>routeKey</routingKeyPattern>
+        <contentType>application/json</contentType>
+        <maxSenderRetries>2</maxSenderRetries>
+        <declareExchange>true</declareExchange>
+        <charset>UTF-8</charset>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="amqp"/>
+    </root>
+</configuration>
