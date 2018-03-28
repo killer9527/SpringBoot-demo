@@ -10,6 +10,7 @@ public class AInterfaceImpl implements AInterface {
         return bInterface;
     }
 
+    //beans.xml使用的是依赖注入，依赖注入必须写setter方法
     public void setbInterface(BInterface bInterface) {
         this.bInterface = bInterface;
     }
