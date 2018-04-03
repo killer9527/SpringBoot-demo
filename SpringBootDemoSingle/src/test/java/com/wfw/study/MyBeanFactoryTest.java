@@ -14,7 +14,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * Created by killer9527 on 2018/3/26.
  */
 public class MyBeanFactoryTest extends TestCase {
-    public void testApplicationContext(){
+    public void testApplicationContext() {
         //测试ClassPathXmlApplicationContext
         ApplicationContext ac = new ClassPathXmlApplicationContext("study/beans.xml");
         BInterface bInterface = (BInterface) ac.getBean("bInterface");
@@ -29,12 +29,11 @@ public class MyBeanFactoryTest extends TestCase {
         ((AInterface) myXmlBeanFactory.getBean("aInterface")).print();
     }
 
-    public void testAnnotationBeanFactory() throws Exception{
+    public void testAnnotationBeanFactory() throws Exception {
         MyAnnotationBeanFactory myAnnotationBeanFactory = new MyAnnotationBeanFactory("com.wfw.study.ioc.annotation");
-        BComponentInterface bComponentInterface = (BComponentInterface)myAnnotationBeanFactory.getBean("bComponentImpl");
+        BComponentInterface bComponentInterface = (BComponentInterface) myAnnotationBeanFactory.getBean("bComponentImpl");
         System.out.println(bComponentInterface.say());
-        AComponent aComponent = (AComponent)myAnnotationBeanFactory.getBean("aComponent");
+        AComponent aComponent = (AComponent) myAnnotationBeanFactory.getBean("aComponent");
         aComponent.print();
-
     }
 }

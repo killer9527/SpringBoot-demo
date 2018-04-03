@@ -1,5 +1,6 @@
 package com.wfw.controller;
 
+import com.wfw.vo.BaseResponseVO;
 import com.wfw.vo.greeting.GreetingRequestVO;
 import com.wfw.vo.greeting.GreetingResponseVO;
 import io.swagger.annotations.Api;
@@ -41,5 +42,11 @@ public class GreetingController extends BaseController {
         response.setId(counter.incrementAndGet());
         response.setContent(String.format(template, request.getName()));
         return response;
+    }
+
+    @RequestMapping(path = "testGlobalExceptionHandler", method = RequestMethod.GET)
+    @ApiOperation(value = "测试全局异常处理")
+    public BaseResponseVO testGlobalExceptionHandler() throws Exception{
+        throw new Exception("this is a global exception handler test");
     }
 }

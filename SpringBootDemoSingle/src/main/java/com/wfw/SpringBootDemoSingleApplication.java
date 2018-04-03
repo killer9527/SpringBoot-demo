@@ -8,10 +8,8 @@ import org.springframework.core.io.support.SpringFactoriesLoader;
 public class SpringBootDemoSingleApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SpringBootDemoSingleApplication.class, args);
-        /**等价于
+        //SpringApplication.run(SpringBootDemoSingleApplication.class, args);
          SpringApplication application = new SpringApplication(SpringBootDemoSingleApplication.class);
          application.run(args);
-         **/
     }
 }
