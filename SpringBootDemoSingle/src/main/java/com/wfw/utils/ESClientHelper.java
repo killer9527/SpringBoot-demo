@@ -1,5 +1,7 @@
 package com.wfw.utils;
 
+import org.elasticsearch.action.admin.indices.create.CreateIndexRequestBuilder;
+import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
 import org.elasticsearch.client.Client;
@@ -9,6 +11,7 @@ import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -146,5 +149,30 @@ public class ESClientHelper {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 创建索引
+     * @param client
+     * @param index：索引名称
+     * @param settings：索引配置
+     * @param mapping：mapping
+     * @return
+     */
+    public static boolean createIndex(Client client, String index, Settings.Builder settings, String mapping){
+        if (client==null || StringUtils.isEmpty(index) || StringUtils.isEmpty(mapping) || indexExists(client, index)){
+            return false;
+        }
+        if (settings == null){
+            settings = Settings.builder()
+                    .put("index.number_of_shards", 5)
+                    .put("index.number_of_replicas", 2);
+        }
+        CreateIndexResponse createIndexResponse = client.admin().indices()
+                .prepareCreate(index)
+                .setSettings(settings)
+                .addMapping(mapping)
+                .get();
+        return createIndexResponse.isAcknowledged();
     }
 }
