@@ -4,9 +4,11 @@ import org.elasticsearch.action.admin.indices.create.CreateIndexRequestBuilder;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
+import org.elasticsearch.action.admin.indices.mapping.put.PutMappingResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.TransportAddress;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -159,7 +161,7 @@ public class ESClientHelper {
      * @param mapping：mapping
      * @return
      */
-    public static boolean createIndex(Client client, String index, Settings.Builder settings, String mapping){
+    public static boolean createIndex(Client client, String index, Settings.Builder settings, String type, String mapping){
         if (client==null || StringUtils.isEmpty(index) || StringUtils.isEmpty(mapping) || indexExists(client, index)){
             return false;
         }
@@ -171,8 +173,11 @@ public class ESClientHelper {
         CreateIndexResponse createIndexResponse = client.admin().indices()
                 .prepareCreate(index)
                 .setSettings(settings)
-                .addMapping(mapping)
                 .get();
-        return createIndexResponse.isAcknowledged();
+        if (!createIndexResponse.isAcknowledged()){
+            return false;
+        }
+        PutMappingResponse putMappingResponse = client.admin().indices().preparePutMapping(index).setType(type).setSource(mapping, XContentType.JSON).get();
+        return putMappingResponse.isAcknowledged();
     }
 }

@@ -7,6 +7,6 @@ import junit.framework.TestCase;
  */
 public class MappingGeneratorTest extends TestCase{
     public void testGenerateMapping(){
-        System.out.println(ElasticsearchMappingGenerator.generateMapping(Department.class, null, false));
+        System.out.println("{" + ElasticsearchMappingGenerator.generateSource(Department.class, null, false) + "}");
     }
 }
