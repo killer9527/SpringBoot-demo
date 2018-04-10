@@ -19,27 +19,27 @@ public class ElasticsearchMappingGenerator {
     private final static String parameterPattern = "\"$parameterName\": \"$parameterValue\"";
     private final static String fieldsPattern = "\"fields\": $fieldsValue";
 
-
     /**
      * 生成type对应的source
+     *
      * @param clazz：定义的类模型
      * @param fieldName：为null时，则只有properties，即为source；不为null时，表示要生成模型中某个字段的source
      * @param isNested：fieldName不为null时有意义，true表示该字段为nested
      * @return
      */
-    public static String generateSource(Class<?> clazz, String fieldName, boolean isNested){
+    public static String generateSource(Class<?> clazz, String fieldName, boolean isNested) {
         String result;
         StringBuilder properties = new StringBuilder();
 
         if (fieldName == null) {
             //主resource只有properties
             result = mappingPattern.replace("\"$type\": ", "");
-        }else{
+        } else {
             //字段对应的resource
-            if (isNested){
+            if (isNested) {
                 //nested字段
                 result = nestedMappingPattern.replace("$type", fieldName);
-            }else{
+            } else {
                 result = mappingPattern.replace("$type", fieldName);
             }
         }
@@ -76,8 +76,8 @@ public class ElasticsearchMappingGenerator {
         if (fieldType.equals(List.class)) {
             //Array dataType
             Type genericType = field.getGenericType();
-            if (genericType instanceof ParameterizedType){
-                fieldType = (Class)((ParameterizedType)genericType).getActualTypeArguments()[0];
+            if (genericType instanceof ParameterizedType) {
+                fieldType = (Class) ((ParameterizedType) genericType).getActualTypeArguments()[0];
             }
         }
         //字段为String类型，需要判断是否分词
@@ -103,7 +103,7 @@ public class ElasticsearchMappingGenerator {
             type = "date";
         } else {
             //如果是Nested dataType类型则需要重新赋值
-            if (elasticProperty!=null && elasticProperty.isNested().equals(NestOpinion.NESTED)) {
+            if (elasticProperty != null && elasticProperty.isNested().equals(NestOpinion.NESTED)) {
                 //注意此时isNested参数为true
                 return generateSource(fieldType, fieldName, true);
             }

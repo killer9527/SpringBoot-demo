@@ -1,16 +1,23 @@
 package com.wfw.study.elasticsearch;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by killer9527 on 2018/4/8.
  */
+@ElasticType(id = "id")
 public class Department {
     private Long id;
     private String departmentName;
     @ElasticProperty(isNested = NestOpinion.NESTED)
     private List<Employee> employees;
     private List<Business> businessList;
+
+    public Department(){
+        this.employees = new ArrayList<>();
+        this.businessList = new ArrayList<>();
+    }
 
     public Long getId() {
         return id;

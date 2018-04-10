@@ -1,10 +1,14 @@
 package com.wfw.utils;
 
+import com.alibaba.fastjson.JSONObject;
+import com.wfw.study.elasticsearch.ElasticType;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequestBuilder;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingResponse;
+import org.elasticsearch.action.index.IndexRequestBuilder;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.TransportAddress;
@@ -15,6 +19,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -177,7 +182,35 @@ public class ESClientHelper {
         if (!createIndexResponse.isAcknowledged()){
             return false;
         }
-        PutMappingResponse putMappingResponse = client.admin().indices().preparePutMapping(index).setType(type).setSource(mapping, XContentType.JSON).get();
+        PutMappingResponse putMappingResponse = client.admin().indices()
+                .preparePutMapping(index)
+                .setType(type)
+                .setSource(mapping, XContentType.JSON).get();
         return putMappingResponse.isAcknowledged();
+    }
+
+    /**
+     * 插入数据
+     * @param client
+     * @param index
+     * @param object
+     * @return
+     */
+    public static String insert(Client client, String index, String type, Object object) throws Exception{
+        String json = JSONObject.toJSONString(object);
+
+        IndexRequestBuilder indexRequestBuilder = client.prepareIndex(index, type)
+                .setSource(json, XContentType.JSON);
+        Class<?> clazz = object.getClass();
+        ElasticType elasticType = clazz.getAnnotation(ElasticType.class);
+        if (elasticType != null && !StringUtils.isEmpty(elasticType.id())) {
+            String fieldName = elasticType.id();
+            String getMethodName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+            Method method = clazz.getMethod(getMethodName);
+            Object id = method.invoke(object);
+            indexRequestBuilder.setId(id.toString());
+        }
+        IndexResponse response = indexRequestBuilder.get();
+        return response.getId();
     }
 }

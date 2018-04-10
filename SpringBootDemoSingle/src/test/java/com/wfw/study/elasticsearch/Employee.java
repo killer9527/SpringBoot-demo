@@ -1,5 +1,8 @@
 package com.wfw.study.elasticsearch;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -8,12 +11,21 @@ import java.util.List;
  */
 public class Employee {
     private String name;
+
     private Integer age;
+
     @ElasticProperty(fieldIndex = FieldIndexOption.ANALYZED, fields = "{\"raw\": {\"type\": \"keyword\"}}")
     private String profile;
+
     @ElasticProperty(dateFormat = "yyyy-MM-dd")
+    @JSONField(format="yyyy-MM-dd")
     private Date birth;
+
     private List<String> articles;
+
+    public Employee(){
+        this.articles = new ArrayList<>();
+    }
 
     public String getName() {
         return name;
