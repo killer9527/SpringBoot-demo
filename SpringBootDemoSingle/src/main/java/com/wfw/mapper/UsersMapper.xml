@@ -113,4 +113,10 @@
     <select id="countUsers" resultType="java.lang.Integer">
         select count(*) from Users;
     </select>
+    <select id="selectByPrimaryKeyForUpdate" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from Users
+        where id = #{id,jdbcType=INTEGER} for update
+    </select>
 </mapper>

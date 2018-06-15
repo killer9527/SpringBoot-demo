@@ -28,4 +28,6 @@ public interface UsersMapper {
                             @Param(value = "size") int size);
 
     int countUsers();
+
+    Users selectByPrimaryKeyForUpdate(Integer id);
 }
